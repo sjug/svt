@@ -27,6 +27,12 @@
         command: pbcompare -old {{ result_directory }}{{ old_file.stdout }} -new {{ new_file }}
         register: command_result
         failed_when: command_result.rc != 0
+
+      - name: Write R2R output
+        local_action:
+          module: copy
+          content: "{{ command_result.stdout }}"
+          dest: "{{ result_directory }}/r2r.stdout"
       when: clone_result.rc is not defined
 
     - name: Move good result to repo
